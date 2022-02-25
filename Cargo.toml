@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 nalgebra = "*"
 libmath = "*"
+regex = "1"
+lazy_static = "1.4.0"

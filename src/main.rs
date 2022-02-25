@@ -10,6 +10,14 @@ fn test_bigram() {
     println!("{:#?}", bigram)
 }
 
+#[test]
+fn test_split() {
+    let txt_split = utils::rem_punct_split("He? Why? Sup! Dude. Also I think this dude is... supposably astedious man! His name is JAKE THE DUDE.");
+
+    println!("{:#?}", txt_split);
+
+}
+
 fn main() {
     println!("Hello, world!");
 }
