@@ -3,7 +3,7 @@ use crate::levenshtein::token_set_ratio;
 use nalgebra::DVector;
 
 #[derive(Debug)]
-struct Bigram {
+pub struct Bigram {
     pub word_1: String,
     pub word_2: String,
     pub label_1: u32,
@@ -22,6 +22,24 @@ impl Bigram {
     }
 
     fn get_dist(&mut self) {
-        self.dist = token_set_ratio(&self.word_1, &self.word_2) / 100f64;
+        self.dist = token_set_ratio(&self.word_1, &self.word_2) as f64 / 100f64;
     }
+
+    pub fn init(&mut self) {
+        self.generate_ohe();
+        self.get_dist();
+    }
+}
+
+
+pub fn new_bigram(word1: &str, word2: &str, label1: u32, label2: u32, length: usize) -> Bigram {
+    let mut bg = Bigram{word_1: word1.parse().unwrap(),
+    word_2: word2.parse().unwrap(), label_1: label1,
+        label_2: label2, dist: 0f64, len_text: length,
+        word_1_ohe: DVector::repeat(1usize, 0.0f64,),
+        word_2_ohe: DVector::repeat(1usize, 0.0f64)};
+    bg.init();
+
+    return bg
+
 }

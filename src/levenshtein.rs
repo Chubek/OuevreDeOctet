@@ -1,14 +1,10 @@
-use  crate::utils;
-use crate::dtype;
-
 use std::borrow::BorrowMut;
 use std::cmp::{max, min};
-use regex::Regex;
-use lazy_static::lazy_static;
 use std::collections::HashSet;
 
+use crate::utils;
+
 use math::round::ceil;
-use crate::dtype::ProfanityRecord;
 
 pub fn levenshtein(a_str: &String, b_str: &String) -> u32 {
     let larger_smaller = utils::return_larger_smaller(a_str, b_str);
@@ -85,9 +81,6 @@ pub fn token_set_ratio(a: &String, b: &String) -> u8 {
     let b_lower = b.to_lowercase();
     let a_trim = a_lower.trim();
     let b_trim = b_lower.trim();
-
-    let a_rep = RE.replace_all(a_trim, "");
-    let b_rep = RE.replace_all(b_trim, "");
 
     let a_split = a.chars().into_iter().map(|x| x.to_string()).collect::<Vec<_>>();
     let b_split = b.chars().into_iter().map(|x| x.to_string()).collect::<Vec<_>>();
