@@ -1,5 +1,6 @@
-mod deep;
-mod layers;
+mod bigram;
+mod encoder;
+mod levenshtein;
 
 fn main() {
     println!("Hello, world!");
