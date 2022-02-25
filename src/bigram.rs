@@ -14,7 +14,7 @@ struct Bigram {
     pub len_text: usize
 }
 
-impl Bigram<T> {
+impl Bigram {
     fn generate_ohe(&mut self) {
         self.word_1_ohe = ohe_lower(self.len_text, self.label_1);
         self.word_2_ohe = ohe_lower(self.len_text, self.label_2);
