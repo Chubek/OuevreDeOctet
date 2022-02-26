@@ -2,6 +2,8 @@ mod bigram;
 mod encoder;
 mod levenshtein;
 mod utils;
+
+use std::borrow::BorrowMut;
 use std::default;
 
 #[test]

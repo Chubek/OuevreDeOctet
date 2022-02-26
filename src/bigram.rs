@@ -1,6 +1,8 @@
 use crate::encoder::ohe_lower;
 use crate::levenshtein::token_set_ratio;
 use nalgebra::DVector;
+use crate::utils::rem_punct_split;
+
 
 #[derive(Debug)]
 pub struct Bigram {
@@ -32,14 +34,34 @@ impl Bigram {
 }
 
 
-pub fn new_bigram(word1: &str, word2: &str, label1: u32, label2: u32, length: usize) -> Bigram {
-    let mut bg = Bigram{word_1: word1.parse().unwrap(),
-    word_2: word2.parse().unwrap(), label_1: label1,
-        label_2: label2, dist: 0f64, len_text: length,
-        word_1_ohe: DVector::repeat(1usize, 0.0f64,),
-        word_2_ohe: DVector::repeat(1usize, 0.0f64)};
+pub fn new_bigram(word1: String, word2: String, label1: u32, label2: u32, length: usize) -> Bigram {
+    let mut bg = Bigram{word_1: word1,
+            word_2: word2, label_1: label1,
+            label_2: label2, dist: 0f64, len_text: length,
+            word_1_ohe: DVector::repeat(1usize, 0.0f64,),
+            word_2_ohe: DVector::repeat(1usize, 0.0f64)};
     bg.init();
 
     return bg
 
+}
+
+
+
+pub fn split_text_into_bigram(text: String) -> Vec<Bigram> {
+    let text_split = rem_punct_split(text.as_str());
+
+    let mut ret: Vec<Bigram> = Vec::new();
+
+    for (i, word1) in text_split.iter().enumerate() {
+        for (j, word2) in text_split.iter().enumerate() {
+            if i == j {
+                continue
+            }
+
+            ret.push(new_bigram(word1.to_string(), word2.to_string(), i as u32, j as u32, text_split.len()))
+        }
+    }
+
+    return  ret
 }

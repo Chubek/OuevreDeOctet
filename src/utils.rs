@@ -1,7 +1,20 @@
-use std::borrow::Borrow;
+use std::borrow::{Borrow, BorrowMut};
+use std::collections::HashSet;
 use std::ops::Deref;
 use regex::Regex;
 use lazy_static::lazy_static;
+use std::io::{self, Read};
+use std::fs::File;
+use std::hash::Hash;
+
+fn filename_to_string(s: &str) -> io::Result<String> {
+    let mut file = File::open(s)?;
+    let mut s = String::new();
+    file.read_to_string(&mut s)?;
+    Ok(s)
+}
+
+
 
 pub fn join_str(vec: Vec<&String>) -> String {
     let mut ret = String::from("");
@@ -46,17 +59,30 @@ pub fn return_larger_smaller<'a>(a: &'a String, b: &'a String) -> (&'a String, &
 }
 
 
-pub fn rem_punct_split(text: &str) -> Vec<String> {
+
+pub fn rem_punct_split(text_given: &str) -> HashSet<String> {
     lazy_static! {
         static ref RE: Regex = Regex::new(r"[.,\\/#!\\?$%\^&\*;:{}=\\-_`~()]+").unwrap();
+        static ref SW: String = filename_to_string("src/stopwords.txt").unwrap();
     }
 
-    let rep: String = RE.replace_all(&text.to_lowercase(), "").to_string();
+
+    let sw_hashset: HashSet<String> = SW.
+        lines()
+        .into_iter()
+        .map(|x| x.trim().to_string())
+        .collect::<HashSet<_>>();
+
+    let mut text: String = text_given.to_lowercase().clone();
+
+    let mut rep: String = RE.replace_all(&text, "").to_string();
 
     let split = rep.split_whitespace()
-                .map(|x| x.to_string()).collect::<Vec<String>>();
+                .map(|x| x.trim().to_string()).collect::<HashSet<String>>();
 
-    return split
+    let diff = split.difference(&sw_hashset).map(|x| x.to_string()).collect::<HashSet<_>>();
+
+    return diff
 
 
 }
